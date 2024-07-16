@@ -1,11 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useAxiosCommon from "../Hooks/useAxiosCommon";
+import useAuth from "../Hooks/useAuth";
 
 const Login = () => {
-    const handleLogin = e => {
+  const { setUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location?.state ? location.state : '/'
+  const axiosCommon = useAxiosCommon();
+    const handleLogin =async e => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log(email, password)
+        try {
+          const { data } = await axiosCommon.post('/login', {email, password})
+          setUser(data.user)
+          localStorage.setItem('token',data.token)
+          console.log(data)
+          navigate(path)
+          
+        } catch (error) {
+          console.log(error)
+        }
 
     }
   return (

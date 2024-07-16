@@ -3,8 +3,10 @@ import useAxiosCommon from "../Hooks/useAxiosCommon";
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
+import { useState } from "react";
 const Register = () => {
     const navigate = useNavigate();
+    const [role, setRole] = useState()
     const axiosCommon = useAxiosCommon()
   const handleLogin =async (e) => {
     e.preventDefault();
@@ -12,6 +14,8 @@ const Register = () => {
     const pin = e.target.pin.value;
     const phone = e.target.phone.value;
     const email = e.target.email.value;
+    // const role = e.target.role.value;
+  
     if(pin.length != 5){
         toast('Pin must be 5 number!!!')
         return ;
@@ -22,7 +26,8 @@ const Register = () => {
       pin: pin,
       phone,
       status: 'pending',
-      balance: 0
+      balance: 0,
+      role
     };
     try {
         const { data } = await axiosCommon.post('/users',user )
@@ -121,9 +126,22 @@ const Register = () => {
             className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
           />
         </div>
+        <div className="space-y-1 text-sm ">
+          <label
+            htmlFor="username"
+            className="block text-left font-medium text-lg dark:text-gray-600"
+          >
+            Role
+          </label>
+         <select onChange={(e) => setRole(e.target.value)} required className="border w-full py-3 px-5" name="" id="">
+          <option value="" disabled selected>Select Role</option>
+          <option value="user">User</option>
+          <option value="agent">Agent</option>
+         </select>
+        </div>
 
         <button className="block w-full p-3 text-center rounded-sm text-gray-50 bg-violet-600">
-          Sign in
+          Sign Up
         </button>
       </form>
 
