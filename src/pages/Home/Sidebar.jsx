@@ -2,16 +2,20 @@ import  { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css'
 import useAuth from '../../Hooks/useAuth';
+import UserRole from '../role/UserRole/UserRole';
+import AgentRole from '../role/AgentRole/AgentRole';
 
 const Sidebar = () => {
 
 
   const navigate = useNavigate();
-  const { user,setUser} = useAuth();
+  const { user,setUser, setToken, role, setRole} = useAuth();
     const [isSideNavOpen, setIsSideNavOpen] = useState(false)
     const handleLogout = () => {
       localStorage.setItem('token', '')
       setUser(null)
+      setToken(null)
+      setRole(null)
       navigate('/login')
     }
     // if(isLoading) return <div className=' h-[300px] flex items-center justify-center'><span className="loading loading-spinner loading-lg"></span></div>
@@ -76,9 +80,13 @@ const Sidebar = () => {
                         <li><NavLink className={'rounded-md text-left inline-block w-full px-5 border py-3 font-medium'} to={'/'}>Home</NavLink></li>
                         <li><NavLink className={'rounded-md text-left inline-block w-full px-5 border py-3 font-medium'} to={'/register'}>Registration</NavLink></li>
                         <li><NavLink className={'rounded-md text-left inline-block w-full px-5 border py-3 font-medium'} to={'/login'}>Login</NavLink></li>
-                        <li><NavLink className={'rounded-md text-left inline-block w-full px-5 border py-3 font-medium'} to={'/send-money'}>Send Money</NavLink></li>
-                        <li><NavLink className={'rounded-md text-left inline-block w-full px-5 border py-3 font-medium'} to={'/login'}>Cash In</NavLink></li>
-                        <li><NavLink className={'rounded-md text-left inline-block w-full px-5 border py-3 font-medium'} to={'/login'}>Cash Out</NavLink></li>
+                     
+                        {
+                          role === 'user' && <UserRole />
+                        }
+                        {
+                          role === 'agent' && <AgentRole />
+                        }
                       
                 </ul>
               </div>

@@ -1,85 +1,82 @@
-import { useState } from "react";
-import useAuth from "../../../Hooks/useAuth";
-// import GetAllUser from "../../../Hooks/getAllUser";
-import AllUsers from "../../../utils/AllUsers";
 import { toast, ToastContainer } from "react-toastify";
+import useAuth from "../../../Hooks/useAuth";
+import AllAgent from "../../../utils/AllAgent";
+import { useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import useUser from "../../../Hooks/useUser";
 
-const SendMoney = () => {
-  const [ refetch] = useUser()
-  const { user, setUser } = useAuth();
-  const axiosSecure = useAxiosSecure();
-  const [users] = AllUsers();
+const CashIn = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const allUsers = users?.filter((item) => item?.email != user?.email);
-  const [moneyUser, setMoneyUser] = useState(0);
-  console.log(user);
-  const handleSendMoney = async(e) => {
+  const axiosSecure = useAxiosSecure();
+  const [agents] = AllAgent();
+  const [agent, setAgent] = useState(null);
+  const handleCashIn =async (e) => {
     e.preventDefault();
     let amount = e.target.tk.value;
-    if(user?.status === 'pending') {
-      toast('You are not verifed. Wait for Admin Approval!!!')
-      return ;
-    }
-    if(amount < 50) {
-      toast('Send Money more then 50TK!!!')
-      return ;
-    }
-    if(amount > 100) {
-      amount = parseFloat(amount) + 5;
-    }
-    if(user?.balance < amount){
-      toast('You Dont have Enough Money!!!')
-      return ;
-    }
     const pin = e.target.pin.value;
-    const paidUser = moneyUser;
-    const details = {
-      email: user?.email,
-      amount,
-      pin,
-      paidUserEmail: paidUser
 
+    if (user?.status === "pending") {
+      toast("You are not verifed. Wait for Admin Approval!!!");
+      return;
     }
+    if (amount < 1) {
+      toast("Please Enter Valid Amount!!!");
+      return;
+    }
+
+   
+    const cashInDetails = {
+      email: user?.email,
+      pin,
+      name: user?.name,
+      agent,
+      amount: parseFloat(amount),
+      type: 'cash in',
+      time: new Date().toLocaleDateString()
+    };
+    console.log(cashInDetails);
     try {
-      const { data } = await axiosSecure.post('/sendmoney', details)
-      console.log(data)
-      if(data.modifiedCount){
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Send Money Successfully",
-          showConfirmButton: false,
-          timer: 1500
-        });
-        // refetch();
-        navigate('/')
-        setUser(null)
-      }
-      else{
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Incorrect Pin",
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
+        const { data} = await axiosSecure.post('/cashin', cashInDetails)
+        console.log(data)
+        if(data.message === 'ok'){
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Please Wait For Agent Approval",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              navigate('/')
+        }
+        else{
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
+        
     } catch (error) {
-      
-      console.log(error);
+        console.log(error)
     }
+
+ 
   };
+ 
   return (
     <div>
       <h2 className="text-3xl font-semibold text-left mb-3">
         Total Balance : {user?.balance}TK
       </h2>
-      <h2 className="text-xl font-medium text-left mb-6">Send Money </h2>
-      <form  onSubmit={handleSendMoney} className="space-y-4 border-2 p-10 rounded-lg">
+      <h2 className="text-xl font-medium text-left mb-6">Cash In </h2>
+      <form
+        onSubmit={handleCashIn}
+        className="space-y-4 border-2 p-10 rounded-lg"
+      >
         <div className="space-y-1 text-sm">
           <label
             htmlFor="password"
@@ -120,7 +117,7 @@ const SendMoney = () => {
             User
           </label>
           <select
-            onChange={(e) => setMoneyUser(e.target.value)}
+              onChange={(e) => setAgent(e.target.value)}
             required
             className="border w-full py-3 px-5"
             name=""
@@ -130,11 +127,11 @@ const SendMoney = () => {
               Select Users
             </option>
 
-            {allUsers.map((user) => (
-              <option key={user._id} value={user?.email}>
-                {user.name}
-              </option>
-            ))}
+             {agents.map((user) => (
+                <option key={user._id} value={user?.email}>
+                  {user.name}
+                </option>
+              ))} 
           </select>
         </div>
         <button
@@ -149,4 +146,4 @@ const SendMoney = () => {
   );
 };
 
-export default SendMoney;
+export default CashIn;

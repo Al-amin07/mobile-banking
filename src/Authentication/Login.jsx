@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAxiosCommon from "../Hooks/useAxiosCommon";
 import useAuth from "../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Login = () => {
-  const { setUser } = useAuth();
+  const { setUser, setToken,setRole } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const path = location?.state ? location.state : '/'
@@ -15,10 +16,33 @@ const Login = () => {
         console.log(email, password)
         try {
           const { data } = await axiosCommon.post('/login', {email, password})
+          console.log(data)
+          if(data.message === 'ok'){
           setUser(data.user)
           localStorage.setItem('token',data.token)
+         
+          setRole(data.user.role)
+          setToken(data.token)
           console.log(data)
+          
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Login Successfully",
+            showConfirmButton: false,
+            timer: 1500
+          });
           navigate(path)
+        }
+      else{
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
           
         } catch (error) {
           console.log(error)
@@ -40,7 +64,7 @@ const Login = () => {
             required
             id=""
             placeholder="Email or Phone"
-            className="w-full px-4 border py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
+            className="w-full px-4 border py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-orange-600"
           />
         
         </div>
@@ -54,7 +78,7 @@ const Login = () => {
             id="password"
             required
             placeholder="Password"
-            className="w-full px-4 border py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
+            className="w-full px-4 border py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-orange-600"
           />
           <div className="flex justify-end text-xs dark:text-gray-600">
             <a rel="noopener noreferrer" href="#">
@@ -62,7 +86,7 @@ const Login = () => {
             </a>
           </div>
         </div>
-        <button className="block w-full p-3 text-center rounded-sm text-gray-50 bg-violet-600">
+        <button className="block w-full p-3 text-center rounded-sm text-gray-50 bg-orange-600">
           Sign in
         </button>
       </form>

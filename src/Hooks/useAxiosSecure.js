@@ -11,15 +11,15 @@ const axiosSecure = axios.create({
 
 const useAxiosSecure = () => {
     const navigate = useNavigate();
-    const { setUser } = useAuth();
-    axiosSecure.interceptors.request.use(config => {
-        const token = localStorage.getItem('token')
-        console.log('in Secure ', token);
-        config.headers.authorization = `Bearer ${token}`
-        return config
-    }, error => {
-        return Promise.reject(error)
-    })
+    const { setUser, setRole, setToken } = useAuth();
+    // axiosSecure.interceptors.request.use(config => {
+    //     const token = localStorage.getItem('token')
+    //     console.log('in Secure ', token);
+    //     config.headers.authorization = `Bearer ${token}`
+    //     return config
+    // }, error => {
+    //     return Promise.reject(error)
+    // })
 
     axiosSecure.interceptors.response.use(config => {
         return config;
@@ -27,6 +27,8 @@ const useAxiosSecure = () => {
         const status = error?.response?.status;
         if(status === 401 || status === 403){
             setUser(null)
+            setRole('')
+            setToken('')
             localStorage.setItem('token', '')
             navigate('/login')
 

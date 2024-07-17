@@ -10,6 +10,13 @@ import Register from "./Authentication/Register.jsx";
 import AuthProvider from "./Provider/AuthProvider.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SendMoney from "./pages/role/UserRole/SendMoney.jsx";
+import Private from "./Private/Private.jsx";
+import Transaction from "./pages/role/Shared/Transaction.jsx";
+import CashIn from "./pages/role/UserRole/CashIn.jsx";
+import CashOut from "./pages/role/UserRole/CashOut.jsx";
+import Balance from "./pages/role/Shared/Balance.jsx";
+import TransactionManage from "./pages/role/AgentRole/TransactionManage.jsx";
+// import Balance from "./pages/role/Shared/Balance.jsx";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -31,7 +38,29 @@ const router = createBrowserRouter([
       },
       {
         path: '/send-money',
-        element: <SendMoney />
+        element: <Private><SendMoney /></Private>
+      },
+      {
+        path: '/transaction',
+        element: <Private><Transaction /></Private>
+      },
+      {
+      path: '/cashin',
+      element: <Private><CashIn /></Private>
+      },
+      {
+      path: '/cashout',
+      element: <Private><CashOut /></Private>
+      },
+      {
+      path: '/balance',
+      element: <Private><Balance /></Private>
+      },
+      // Agent
+
+      {
+        path: '/transactionmanage',
+        element: <TransactionManage />
       }
     ],
   },

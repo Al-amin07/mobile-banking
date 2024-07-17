@@ -72,7 +72,7 @@ const Register = () => {
             id="username"
             required
             placeholder="Username"
-            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
+            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-orange-600"
           />
         </div>
         {/* Pin */}
@@ -89,7 +89,7 @@ const Register = () => {
             required
             id="pin"
             placeholder="Pin"
-            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
+            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-orange-600"
           />
         </div>
         {/* Mobile */}
@@ -106,7 +106,7 @@ const Register = () => {
             id="username"
             required
             placeholder="Number"
-            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
+            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-orange-600"
           />
         </div>
         {/* Email */}
@@ -123,7 +123,7 @@ const Register = () => {
             id="email"
             required
             placeholder="Email"
-            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
+            className="w-full border px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-orange-600"
           />
         </div>
         <div className="space-y-1 text-sm ">
@@ -140,7 +140,7 @@ const Register = () => {
          </select>
         </div>
 
-        <button className="block w-full p-3 text-center rounded-sm text-gray-50 bg-violet-600">
+        <button className="block w-full p-3 text-center rounded-sm text-gray-50 bg-orange-600">
           Sign Up
         </button>
       </form>
